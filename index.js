@@ -16,6 +16,7 @@ app.use(express.json());
 app.get('/sms', (req, res) => {   
 
     res.send('loaded referredClients');    
+    console.log("loaded sms gateway")
     
 })
 
