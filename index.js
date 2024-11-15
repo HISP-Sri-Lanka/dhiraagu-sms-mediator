@@ -13,7 +13,7 @@ dotenv.config();
 
 app.use(express.json());
 
-app.get('/sms', (req, res) => {   
+app.post('/sms', (req, res) => {   
 
     res.send('loaded sms gateway');    
     console.log("loaded sms gateway")
