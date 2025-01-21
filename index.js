@@ -1,15 +1,10 @@
 const express = require('express')
 const app = express()
 const axios = require('axios')
-// const soap = require('soap')
 const cron = require('node-cron')
 const xml2js = require('xml2js');
-// const sendsms = require('./sendsms')
-// const logging = require('./logging')
 var fs = require('node:fs')
 const dotenv = require('dotenv')
-// const getFhirResource = require('./getFhirResource')
-// const smsTemplate = require('./smsTemplate')
 dotenv.config();
 const parser = new xml2js.Parser();
 const logging = require('./logging')
@@ -17,8 +12,6 @@ const logging = require('./logging')
 app.use(express.json());
 
 app.post('/sms', (req, res) => {   
-
-    // console.log(req.query);
 
     if (req.query && req.query.username && req.query.password && req.query.message && req.query.to) {
 
@@ -28,8 +21,6 @@ app.post('/sms', (req, res) => {
         const to = req.query.to
 
         const decodedMessage = decodeURIComponent(message);
-
-        // console.log("Decoded", decodedMessage)
 
         const sendSms = async () => {
             try {
@@ -42,8 +33,6 @@ app.post('/sms', (req, res) => {
                     .replace('{{PASSWORD}}', password)
                     .replace('{{MESSAGE}}', decodedMessage)
                     .replace('{{PHONE_NUMBER}}', to);
-                    // .replace('{{PHONE_NUMBER}}', `9607607181`);
-                    // .replace('{{PHONE_NUMBER}}', `9609169415`);
 
                 // Make a POST request to the SMS gateway
                 const response = await axios.post(process.env.SMS_GTWY_PROVIDER_URL, xmlPayload, {
@@ -117,6 +106,7 @@ app.post('/debug', (req, res) => {
         logging('Info', `SMS Body: ${message}`)
 
         return res.status(200).json({ info: `response logged` });
+
     } else {
         logging('Error', `Missing query parameters`)
         return res.status(400).json({ error: `Missing query parameters` });
