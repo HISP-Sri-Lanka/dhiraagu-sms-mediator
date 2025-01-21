@@ -12,6 +12,7 @@ const dotenv = require('dotenv')
 // const smsTemplate = require('./smsTemplate')
 dotenv.config();
 const parser = new xml2js.Parser();
+const logging = require('./logging')
 
 app.use(express.json());
 
@@ -86,6 +87,39 @@ app.post('/sms', (req, res) => {
 
         // Run the function to send the SMS
         sendSms();
+    } else {
+        res.status(400).json({ error: 'Missing query parameters' });
+    }
+      
+    
+})
+
+app.post('/debug', (req, res) => {   
+
+    // console.log(req.query);
+
+    if (req.query && req.query.username && req.query.password && req.query.message && req.query.to) {
+
+        const username = req.query.username
+        const password = req.query.password
+        const message = req.query.message
+        const to = req.query.to
+
+        const decodedMessage = decodeURIComponent(message);
+
+        console.log("Decoded", decodedMessage)
+
+        // process.env.SMS_GTWY_PROVIDER_URL
+
+        // Run the function to send the SMS
+
+        logging('Info', `SMS To: ${to}`)
+        logging('Info', `SMS Body: ${message}`)
+
+        return res.status(200).json({ info: `response logged` });
+    } else {
+        logging('Error', `Missing query parameters`)
+        return res.status(400).json({ error: `Missing query parameters` });
     }
       
     
