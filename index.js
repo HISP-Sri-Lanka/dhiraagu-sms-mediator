@@ -60,7 +60,13 @@ app.post('/sms', (req, res) => {
                     console.log("RESULT", result.TELEMESSAGE.TELEMESSAGE_CONTENT[0].RESPONSE[0].RESPONSE_STATUS[0])
 
                     if (responseStatus === '100') {
-                        return res.status(200).send(response.data)
+                        // return res.status(200).send(response.data)
+                        // Bug fix for SMS not showing in DHIS2 SMS Configurator app
+                        return res.status(200).json({
+                            success: true,
+                            message: 'SMS sent successfully',
+                            data: response.data
+                        })
                     } else {
                         return res.status(400).send("Invalid Response")
                     }
